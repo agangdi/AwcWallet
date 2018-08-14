@@ -2,8 +2,9 @@
   <div class="hello">
     <img src="../assets/logo.png">
     <h2>{{msg}}</h2>
+    <button v-on:click="go('/accountList')">Account List</button>
     <button v-on:click="go('/createAccount')">Create Account</button>
-    <button>Import Account</button>
+    <button v-on:click="go('/importAccount')">Import Account</button>
   </div>
 </template>
 

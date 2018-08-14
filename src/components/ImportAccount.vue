@@ -7,6 +7,11 @@
     </div>
     <div id="form">
       <md-field :class="messageClass">
+        <label>输入助记词</label>
+        <md-textarea v-model="mnemonic"></md-textarea>
+        <span class="md-error">助记词不得为空</span>
+      </md-field>
+      <md-field :class="messageClass">
         <label>钱包名称</label>
         <md-input v-model="wallet.name"></md-input>
         <span class="md-error">不得为空</span>
@@ -29,20 +34,8 @@
         <md-input v-model="wallet.passhint" required></md-input>
         <span class="md-error">不得为空</span>
       </md-field>
-      <button v-on:click="submit()" v-bind:disabled="createBtnDisable" class="createBtn">创建</button>
-
+      <button v-on:click="submit()" v-bind:disabled="createBtnDisable" class="createBtn">下一步</button>
     </div>
-    <md-dialog :md-active.sync="showDialog">
-      <md-dialog-title>请离线备份好您的助记词</md-dialog-title>
-          <p class="mnemonic">{{mnemonic}}</p>
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="createAccount()">已确认记牢</md-button>
-      </md-dialog-actions>
-    </md-dialog>
-    <md-dialog-alert
-      :md-active.sync="ifShowError"
-      :md-content="errorMsg"
-      md-confirm-text="确认!" />
     <div id="loading" v-if="showLoading">
       <md-progress-bar md-mode="query"></md-progress-bar>
     </div>
@@ -52,30 +45,27 @@
 <script>
 import Vue from 'vue'
 var keyCreate = require("../utils/mnemonic-privatekey")
-// var eth = require('../utils/eth')
 import * as eth from '../utils/eth'
 const bip39 = require('bip39');
 
 console.log(eth)
 
 export default {
-  name: 'CreateAccount',
+  name: 'ImportAccount',
   data (){
     return {
-      msg: 'Welcome to Your AWC wallet',
+      msg: 'Import Your AWC wallet',
       wallet: {
         name: '',
         passhint: '',
         keystore: null,
-        account: ''
+        account: '',
       },
       password: '',
       repass: '',
       mnemonic: '',
       privateKey: '',
       keystore: {},
-      account: '',
-      showDialog: false,
       hasMessages: false,
       showLoading: false,
       createBtnDisable: false,
@@ -89,8 +79,7 @@ export default {
       console.log('submit')
       if (this.createBtnDisable) {return false}
       this.createBtnDisable = true
-    this.crea
-      if (!this.wallet.name || !this.password || !this.repass || !this.wallet.passhint || this.password != this.repass) {
+      if (!this.wallet.name || !this.password || !this.repass || !this.wallet.passhint || this.password != this.repass || !this.mnemonic) {
         this.hasMessages = true
         this.createBtnDisable = false
         return;
@@ -101,13 +90,8 @@ export default {
         _this.createBtnDisable = true;
         _this.showLoading = true
         _this.hasMessages = false
-      }).then(()=>{
-        console.log('mnemonic')
-        _this.mnemonic = bip39.generateMnemonic()
-        console.log(_this.mnemonic)
-        return _this.mnemonic
-      }).then((mnemonic) => {
-        var ret = keyCreate.getPrivateKeyFromMnemonic(mnemonic)
+      }).then(() => {
+        var ret = keyCreate.getPrivateKeyFromMnemonic(this.mnemonic)
         if (!ret) {
           throw new Error('私钥创建失败')
         }
@@ -128,21 +112,23 @@ export default {
         accounts = accounts.concat([_this.wallet])
         console.log(accounts)
         eth.storeAccounts(accounts)
+        console.log('importAccount')
+        this.createBtnDisable = false;
+        this.showLoading = false 
+        this.hasMessages = false
+        location.hash = '/accountList' 
       }).then(()=>{
         console.log('show dialog')
         _this.showLoading = false
-        _this.showDialog = true
       }).catch((error) => {
         console.log('catch')
         console.log(error)
         _this.showError(error)
         _this.showLoading = false
-        // this.showDialog = true;
       })
     },
     createAccount(){
-      console.log('createAccount')
-      this.showDialog = false
+      console.log('importAccount')
       this.createBtnDisable = false;
       this.showLoading = false 
       this.hasMessages = false
