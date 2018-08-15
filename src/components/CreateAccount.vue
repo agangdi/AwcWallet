@@ -89,7 +89,6 @@ export default {
       console.log('submit')
       if (this.createBtnDisable) {return false}
       this.createBtnDisable = true
-    this.crea
       if (!this.wallet.name || !this.password || !this.repass || !this.wallet.passhint || this.password != this.repass) {
         this.hasMessages = true
         this.createBtnDisable = false

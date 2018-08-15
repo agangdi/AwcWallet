@@ -31,7 +31,8 @@
           <md-list-item>
             <div class="md-list-item-text">
               <span>{{address}}</span> 
-              <span>Eth: {{balance}} <md-button @click="go('/transaction/eth/' + address)" class="md-primary">转账</md-button></span> 
+              <span>AWC: {{awc}}</span> 
+              <span>ETH: {{balance}} <md-button @click="go('/transaction/eth/' + address)" class="md-primary">转账</md-button></span> 
             </div>
           </md-list-item>
         </md-list>
@@ -43,6 +44,9 @@
 <script>
 import * as eth from '../utils/eth'
 import Web3 from 'web3'
+var abis = require('../utils/abis')
+window.web3 = Web3
+window.abis = abis
 
 export default {
   name: 'AccountDetail',
@@ -50,11 +54,13 @@ export default {
     return {
       address: '',
       balance: '0',
-      menuVisible: false
+      menuVisible: false,
+      awc: 0
     }
   },
   mounted() {
     this.address = this.$route.params.address
+    var web3 = new Web3("HTTP://127.0.0.1:7545")
     web3.eth.getBalance(this.address, 'latest').then((balance)=>{
         console.log(this.address + ' balance: ', balance)
         if (balance) {
@@ -62,6 +68,13 @@ export default {
         }
         console.log(this.balance)
     })
+    console.log(abis)
+    let contract = new web3.eth.Contract(abis.abi, abis.contract)
+    window.contract = contract
+    contract.methods.balanceOf(this.address).call().then((balance) =>{
+      this.awc = balance
+    })
+    // todo .send
   },
   methods: {
     trasation: (token) => {
