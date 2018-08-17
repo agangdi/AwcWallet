@@ -43,8 +43,11 @@ function getPrivateKeyFromRandom() {
 exports.getPrivateKeyFromRandom = getPrivateKeyFromRandom;
 
 function getAddressFromPrivateKey(privateKey) {
+	// privateKey =  Buffer.from(privateKey, 'hex')
 	return keythereum.privateKeyToAddress(privateKey)
 }
+
+exports.getAddressFromPrivateKey = getAddressFromPrivateKey;
 
 function getPrivateKeyFromKeystore(keystore, password) {
 	const privateKeyBuf = keythereum.recover(password, keystore);

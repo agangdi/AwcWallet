@@ -7,7 +7,7 @@
     </div>
     <div id="form">
       <md-field :class="messageClass">
-        <label>输入助记词</label>
+        <label>输入助记词或私钥</label>
         <md-textarea v-model="mnemonic"></md-textarea>
         <span class="md-error">助记词不得为空</span>
       </md-field>
@@ -91,6 +91,11 @@ export default {
         _this.showLoading = true
         _this.hasMessages = false
       }).then(() => {
+        if (this.mnemonic.length == 64 && this.mnemonic.indexOf(' ') === -1 ) {
+          _this.privateKey = this.mnemonic
+          _this.wallet.account = keyCreate.getAddressFromPrivateKey(_this.privateKey)
+          return _this.privateKey
+        }
         var ret = keyCreate.getPrivateKeyFromMnemonic(this.mnemonic)
         if (!ret) {
           throw new Error('私钥创建失败')
