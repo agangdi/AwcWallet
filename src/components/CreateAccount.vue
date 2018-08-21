@@ -52,11 +52,8 @@
 <script>
 import Vue from 'vue'
 var keyCreate = require("../utils/mnemonic-privatekey")
-// var eth = require('../utils/eth')
 import * as eth from '../utils/eth'
 const bip39 = require('bip39');
-
-console.log(eth)
 
 export default {
   name: 'CreateAccount',

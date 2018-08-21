@@ -2,8 +2,9 @@
 var keyCreate = require("../utils/mnemonic-privatekey")
 var EthereumTx = require('ethereumjs-tx')
 import * as eth from '../utils/eth'
+import abis from '../utils/abis'
 import Web3 from 'web3'
-const web3 = new Web3("HTTP://127.0.0.1:7545")
+const web3 = new Web3(abis.gethNode)
 
 const STORE_ACCOUNTS_KEY = 'awc_store_accounts_key'
 

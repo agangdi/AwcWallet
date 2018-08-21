@@ -50,7 +50,7 @@ var aibs = require('../utils/abis')
 import * as eth from '../utils/eth'
 const bip39 = require('bip39');
 import Web3 from 'web3'
-const web3 = new Web3("HTTP://127.0.0.1:7545")
+const web3 = new Web3(abis.gethNode)
 window.web3 = web3
 
 console.log(eth)

@@ -44,6 +44,7 @@
 <script>
 import * as eth from '../utils/eth'
 import Web3 from 'web3'
+import Abis from '../utils/abis'
 
 export default {
   name: 'TripleLine',
@@ -56,7 +57,7 @@ export default {
   mounted() {
     var _list = eth.getAccounts()
     console.log(_list)
-    var web3 = new Web3("HTTP://127.0.0.1:7545")
+    var web3 = new Web3(Abis.gethNode)
     window.web3 = web3
     console.log(web3)
     var batch = new web3.BatchRequest();

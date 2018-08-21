@@ -71,7 +71,7 @@ import * as eth from '../utils/eth'
 var EthereumTx = require('ethereumjs-tx')
 import Web3 from 'web3'
 var abis = require('../utils/abis')
-var web3 = new Web3("HTTP://127.0.0.1:7545")
+var web3 = new Web3(abis.gethNode)
 const contract = new web3.eth.Contract(abis.abi, abis.contract)
 window.contract = contract
 
@@ -95,7 +95,7 @@ export default {
   },
   mounted() {
     this.address = this.$route.params.address
-    var web3 = new Web3("HTTP://127.0.0.1:7545")
+    var web3 = new Web3(abis.gethNode)
     web3.eth.getBalance(this.address, 'latest').then((balance)=>{
         console.log(this.address + ' balance: ', balance)
         if (balance) {
@@ -173,7 +173,7 @@ export default {
         return false
       }
 
-      var web3 = new Web3("HTTP://127.0.0.1:7545")
+      var web3 = new Web3(abis.gethNode)
       let privateKey = eth.fetchPrivateKeyWithAddress(this.address, this.password)
       privateKey =  Buffer.from(privateKey, 'hex')
 
