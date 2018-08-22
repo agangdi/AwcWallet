@@ -90,7 +90,8 @@ export default {
       nonce: null,
       gasLimit: null,
       gasPrice: null,
-      errorMsg: ''
+      errorMsg: '',
+      buyClose: false
     }
   },
   mounted() {
@@ -112,15 +113,17 @@ export default {
     })
     // todo .send
     // todo fetch gas and to address
-    web3.eth.getBlock("latest").then((block)=>{
-      this.gasLimit = block.gasLimit
-    })
+    // web3.eth.getBlock("latest").then((block)=>{
+    //   this.gasLimit = block.gasLimit
+    // })
+    this.gasLimit = abis.gasLimit
     web3.eth.getTransactionCount(this.address).then((count) => {
       this.nonce = count
     })
-    web3.eth.getGasPrice().then((gasPrice) => {
-      this.gasPrice = gasPrice
-    })
+    this.gasPrice = abis.gasPrice
+    // web3.eth.getGasPrice().then((gasPrice) => {
+    //   this.gasPrice = gasPrice
+    // })
     console.log(this)
     
   },
@@ -132,9 +135,14 @@ export default {
       location.hash = hash
     },
     reload() {
-      location.hash = '/accountDetail/' + this.address
+      console.log("this.reload")
+      location.hash = location.hash
     },
     buyAwc() {
+      if (this.buyClose) {
+        return false
+      }
+      this.buyClose = true
       // note: methods 中用箭头函数取不到this
       console.log("awcAmount: %s + password: %s", this.awcAmount, this.password)
       if (!this.awcAmount || !this.password) {
@@ -152,7 +160,7 @@ export default {
       }
       console.log(rawTx)
       try{
-        eth.sendTrasaction(this.address, this.password, rawTx, (error, result) => {
+        eth.sendTrasaction(this.address, this.password, rawTx, (result) => {
           this.reload()
         })
       }catch(err){
@@ -161,6 +169,7 @@ export default {
         //   this.errorMsg = '密码不正确'
         // }
         console.log(err)
+        this.reload()
       }
       
     },

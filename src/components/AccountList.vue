@@ -32,7 +32,6 @@
             <div v-on:click="go(account.account)" class="md-list-item-text">
               <span>{{account.name}}</span>
               <span>{{account.account}}</span>
-              <span>eth: {{account.balance}} </span>
             </div>
           </md-list-item>
         </md-list>

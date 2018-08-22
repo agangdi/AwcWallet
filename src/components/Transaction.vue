@@ -46,7 +46,7 @@
 import Vue from 'vue'
 var keyCreate = require("../utils/mnemonic-privatekey")
 var EthereumTx = require('ethereumjs-tx')
-var aibs = require('../utils/abis')
+var abis = require('../utils/abis')
 import * as eth from '../utils/eth'
 const bip39 = require('bip39');
 import Web3 from 'web3'
@@ -119,14 +119,15 @@ export default {
         console.log(block)
         console.log("gasLimit: " + block.gasLimit);
         this.nonce = block.number
-        this.gasLimit = block.gasLimit
         var gas = web3.utils.fromWei(block.gasLimit.toString(), 'ether')
         var hintAddress = this.toAddress.substr(0, 8) + '...' + this.toAddress.substr(-4, 4)
         this.transactionCon = '<p>交易' + this.amount + 'eth<br />' + hintAddress + '</p><p>花费Gas:' + gas + ' eth</p>'
       })
-      web3.eth.getGasPrice().then((gasPrice) => {
-        this.gasPrice = gasPrice
-      })
+      this.gasPrice = abis.gasPrice
+       this.gasLimit = abis.gasLimit
+      // web3.eth.getGasPrice().then((gasPrice) => {
+      //   this.gasPrice = gasPrice
+      // })
       
       this.active = true
     },

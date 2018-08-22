@@ -59,8 +59,6 @@ export function sendTrasaction(from, password, rawTx, callback) {
 
   web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
   .on('receipt', (result) => {
-    console.log('error: ')
-    console.log(error)
     console.log('result: ')
     console.log(result)
     callback(result)
