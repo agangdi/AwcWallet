@@ -4,7 +4,9 @@
 
 ## Description
 	
-# A ethereum wallet for smart contract [Animal World Coin](https://github.com/agangdi/AnimalWorldCoin)
+### A ethereum wallet for smart contract [Animal World Coin](https://github.com/agangdi/AnimalWorldCoin)
+
+### See [demo](http://awc.artbchain.io)
 
 ## Build Setup
 
